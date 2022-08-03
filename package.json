@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "compileRun": "tsc \"./src/index.ts\" --outDir \"./compiled/\" && node -r dotenv/config \"./compiled/index.js\"",
-    "run": "node \"./compiled/index.js\""
+    "start": "node \"./compiled/index.js\""
   },
   "author": "",
   "license": "ISC",
