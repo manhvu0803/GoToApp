@@ -2,3 +2,4 @@ serviceAccountKey.*
 .env
 
 node_modules/
+compiled/

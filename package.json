@@ -5,12 +5,15 @@
   "main": "index.js",
   "scripts": {
     "compileRun": "tsc \"./src/index.ts\" --outDir \"./compiled/\" && node -r dotenv/config \"./compiled/index.js\"",
+    "build": "tsc \"./src/index.ts\" --outDir \"./compiled/\"",
+    "postinstall": "npm run build",
     "start": "node \"./compiled/index.js\""
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "express": "^4.18.1",
     "firebase-admin": "^11.0.1"
   },
   "devDependencies": {
