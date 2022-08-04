@@ -8,3 +8,7 @@ app.listen(process.env.PORT || 5000, () => {
     signUp.enable();
     login.enable();
 })
+
+app.get("/", (req, res) => {
+    res.send("ok");
+})
