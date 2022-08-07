@@ -34,7 +34,6 @@ async function handleData(snapshot: DataSnapshot)
         let errorString = String(error);
         handleError(errorString);
         database.ref("loginStatus").set({
-            username: val.username ?? "",
             phoneNumber: val.phoneNumber ?? "",
             successful: false,
             error: errorString
