@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "compileRun": "tsc \"./src/index.ts\" --outDir \"./compiled/\" && node -r dotenv/config \"./compiled/index.js\"",
+    "compileRun": "npm run build && node -r dotenv/config \"./compiled/index.js\"",
     "build": "tsc \"./src/index.ts\" --outDir \"./compiled/\"",
-    "postinstall": "npm run build",
     "start": "node \"./compiled/index.js\""
   },
   "author": "",

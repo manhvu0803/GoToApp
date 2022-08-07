@@ -10,15 +10,17 @@ export enum AccountType
 
 export class Account
 {
-    username: string;
+    id: string;
+    name: string;
     phoneNumber: string;
     password: string;
     type: AccountType;
+    deviceToken: string;
 
-    static async TryFromFirestore(username: string, phoneNumber?: string)
+    static async TryFromFirestore(phoneNumber: string)
     {
         try {
-            return await Account.FromFirestore(username, phoneNumber);
+            return await Account.FromFirestore(phoneNumber);
         }
         catch {
             return null;
@@ -26,46 +28,51 @@ export class Account
     }
 
     /**
-     * Get account info from Firestore with either username or phone number.
-     * Username will be used first. If it fail, phone number will be used
+     * Get account info from Firestore with either name or phone number.
+     * name will be used first. If it fail, phone number will be used
      * @param phoneNumber
-     * @param username
+     * @param name
      * @returns account info
      */
-    static async FromFirestore(username: string, phoneNumber?: string)
+    static async FromFirestore(phoneNumber: string)
     {
-        let val = null;
-        if (username) {
-            val = await Account.TryGet("username", username);
-        }
-        
-        if (val == null && phoneNumber) {
-            val = await Account.TryGet("phoneNumber", phoneNumber);
+        let val: Account | null = null;
+
+        if (phoneNumber) {
+            val = await Account.GetByPhone(phoneNumber);
         }
 
         if (val == null) {
             throw new Error("User does not exists");
         }
         
-        let accountType = AccountType[AccountType[val["accountType"]]];
-        return new Account(val["username"], val["phoneNumber"], val["password"], accountType, false)
+        return val;
     }
 
-    private static async TryGet(fieldName: string, value: string)
+    /**
+     * Try to get info of an account from Firestore by phone number 
+     * @param phoneNumber
+     * @returns 
+     */
+    private static async GetByPhone(phoneNumber: string)
     {
-        let result = await firestore.query(firestore.collection("users").where(fieldName, "==", value));
+        let query = firestore.collection("users").where("phoneNumber", "==", phoneNumber);
+        let result = await firestore.query(query);
 
         if (result.length <= 0) {
             return null;
         }
 
-        return result[0];
+        let val = result[0];
+        
+        let accountType = AccountType[AccountType[val.accountType]];
+        return new Account(val.name, val.phoneNumber, val.password, accountType, val.deviceToken, val.id, false);
     }
 
-    constructor(username: string, phoneNumber: string, password: string, accountType: AccountType, hashPassword: boolean = true)
+    constructor(name: string, phoneNumber: string, password: string, accountType: AccountType, deviceToken: string, id?: string, hashPassword: boolean = true)
     {
-        if (!username) {
-            throw new Error("No username");
+        if (!name) {
+            throw new Error("Name is empty");
         }
 
         if (!phoneNumber) {
@@ -76,7 +83,7 @@ export class Account
             throw new Error("No password");
         }
         
-        this.username = username;
+        this.name = name;
         this.phoneNumber = phoneNumber;
 
         if (hashPassword) {
@@ -86,15 +93,27 @@ export class Account
             this.password = password;
         }
 
-        this.type = accountType;
+        if (!accountType) {
+            this.type = AccountType.Customer;
+        }
+        else {
+            this.type = accountType;
+        }
+
+        if (id) {
+            this.id = id; 
+        }
+        
+        this.deviceToken = deviceToken;
     }
 
     public jsObject() {
         return {
-            username: this.username,
+            name: this.name,
             phoneNumber: this.phoneNumber,
             password: this.password,
-            accountType: AccountType[this.type]
+            accountType: AccountType[this.type],
+            devicetoken: this.deviceToken
         };
     }
 }

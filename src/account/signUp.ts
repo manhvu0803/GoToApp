@@ -23,17 +23,18 @@ async function handleData(snapshot: DataSnapshot)
     if (!val)
         return;
 
-    console.log("New user")
+    console.log("New user");
     console.log(val);
     
     try {
-        let newAccount = new Account(val.username, val.phoneNumber, val.password, AccountType.Customer);
+        let newAccount = new Account(val.name, val.phoneNumber, val.password, AccountType.Customer, val.deviceToken);
         await register(newAccount);
+        console.log(`User ${newAccount.phoneNumber} registered successfully`)
     } 
     catch (error) {
         handleError(String(error));
         database.ref("registerStatus").set({
-            username: val.username ?? "",
+            name: val.name ?? "",
             successful: false,
             error: String(error)
         });
@@ -42,21 +43,17 @@ async function handleData(snapshot: DataSnapshot)
 
 async function register(newAccount: Account)
 {
-    let existingAccount = await Account.TryFromFirestore(newAccount.username, newAccount.phoneNumber);
+    let existingAccount = await Account.TryFromFirestore(newAccount.phoneNumber);
     if (existingAccount != null) {
-        if (newAccount.username == existingAccount.username) {
-            throw new Error("Username has already been used")
-        }
-
         throw new Error("Phone number has already been used")
     }
     
     await firestore.collection("users").doc().set(newAccount.jsObject());
 
-    console.log(`Registered user ${newAccount.username}`)
+    console.log(`Registered user ${newAccount.phoneNumber}`)
     
     database.ref("registerStatus").set({
-        username: newAccount.username,
+        phoneNumber: newAccount.phoneNumber,
         successful: true
     });
 }

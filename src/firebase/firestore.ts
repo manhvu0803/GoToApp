@@ -1,9 +1,12 @@
 import * as firebaseApp from "./firebaseApp";
-import { DocumentReference, getFirestore, Query, QuerySnapshot } from "firebase-admin/firestore";
+import { DocumentReference, Firestore, getFirestore, Query, QuerySnapshot } from "firebase-admin/firestore";
 
 firebaseApp.initialize();
 
 const firestore = getFirestore();
+firestore.settings({
+    ignoreUndefinedProperties: true
+})
 
 export function collection(collectionPath: string) 
 {
@@ -31,5 +34,5 @@ export function snapshotToData(snapshot: QuerySnapshot)
 
 export async function update(ref: DocumentReference, data: any) 
 {
-    return await ref.set(data);
+    return await ref.update(data);
 }

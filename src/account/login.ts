@@ -1,8 +1,9 @@
 import { DataSnapshot } from "firebase-admin/database";
 import { Account } from "./account";
 import { handleError } from "../utilities";
-import * as database from "../firebase/database"
-import * as bcrypt from "bcrypt"
+import * as database from "../firebase/database";
+import * as bcrypt from "bcrypt";
+import * as firestore from "../firebase/firestore";
 
 console.log("Listening for logins");
 
@@ -23,10 +24,11 @@ async function handleData(snapshot: DataSnapshot)
     if (!val)
         return;
 
-    console.log("New login " + val.username);
+    console.log("New login " + val.phoneNumber);
     
     try {
-        await login(val.username, val.phoneNumber, val.password);
+        await login(val.phoneNumber, val.password, val.deviceToken);
+        console.log(val.phoneNumber + " logged in sucessfully")
     } 
     catch (error) {
         let errorString = String(error);
@@ -40,17 +42,18 @@ async function handleData(snapshot: DataSnapshot)
     }
 }
 
-async function login(username: string, phoneNumber: string, password: string)
+async function login(phoneNumber: string, password: string, deviceToken?: string)
 {
-    let account = await Account.FromFirestore(username, phoneNumber);
+    let account = await Account.FromFirestore(phoneNumber);
 
     if (!bcrypt.compareSync(password, account.password)) {
-        throw new Error("Wrong usernanme, phone number or password");
+        throw new Error("Wrong phone number or password");
     }
+
+    await firestore.collection("users").doc(account.id).update({ deviceToken: deviceToken });
     
     await database.ref("loginStatus").set({
         successful: true,
-        username: account.username,
         phoneNumber: account.phoneNumber,
         accountType: account.type,
         token: "mock_token"
