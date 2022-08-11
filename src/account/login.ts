@@ -53,6 +53,7 @@ async function login(phoneNumber: string, password: string, deviceToken?: string
     
     await database.ref("loginStatus").set({
         successful: true,
+        name: account.name,
         phoneNumber: account.phoneNumber,
         accountType: account.type,
         token: "mock_token"
