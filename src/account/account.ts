@@ -28,19 +28,13 @@ export class Account
     }
 
     /**
-     * Get account info from Firestore with either name or phone number.
-     * name will be used first. If it fail, phone number will be used
+     * Get account info from Firestore by or phone number
      * @param phoneNumber
-     * @param name
      * @returns account info
      */
-    static async FromFirestore(phoneNumber: string)
+    public static async FromFirestore(phoneNumber: string)
     {
-        let val: Account | null = null;
-
-        if (phoneNumber) {
-            val = await Account.GetByPhone(phoneNumber);
-        }
+        let val = await Account.GetByPhone(phoneNumber);
 
         if (val == null) {
             throw new Error("User does not exists");
@@ -54,7 +48,7 @@ export class Account
      * @param phoneNumber
      * @returns 
      */
-    private static async GetByPhone(phoneNumber: string)
+    public static async GetByPhone(phoneNumber: string)
     {
         let query = firestore.collection("users").where("phoneNumber", "==", phoneNumber);
         let result = await firestore.query(query);
@@ -78,11 +72,7 @@ export class Account
         if (!phoneNumber) {
             throw new Error("No phone number");
         }
-
-        if (!password) {
-            throw new Error("No password");
-        }
-        
+ 
         this.name = name;
         this.phoneNumber = phoneNumber;
 
@@ -109,6 +99,7 @@ export class Account
 
     public jsObject() {
         return {
+            id: this.id,
             name: this.name,
             phoneNumber: this.phoneNumber,
             password: this.password,

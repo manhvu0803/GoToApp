@@ -43,19 +43,26 @@ async function handleData(snapshot: DataSnapshot)
 
 async function login(phoneNumber: string, password: string, deviceToken?: string)
 {
-    let account = await Account.FromFirestore(phoneNumber);
+    let account: Account = await Account.FromFirestore(phoneNumber);
 
-    if (!bcrypt.compareSync(password, account.password)) {
+    if (account.password && !bcrypt.compareSync(password, account.password)) {
         throw new Error("Wrong phone number or password");
     }
 
     await firestore.collection("users").doc(account.id).update({ deviceToken: deviceToken });
     
-    await database.ref("loginStatus").set({
+    let value: any = {
         successful: true,
         name: account.name,
+        id: account.id,
         phoneNumber: account.phoneNumber,
         accountType: account.type,
         token: "mock_token"
-    });
+    };
+
+    if (!account.password) {
+        value.warning = "Please update your username and password";
+    }
+
+    await database.ref("loginStatus").set(value);
 }
