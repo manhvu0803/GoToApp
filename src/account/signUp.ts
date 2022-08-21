@@ -54,6 +54,7 @@ async function register(newAccount: Account)
     
     database.ref("registerStatus").set({
         phoneNumber: newAccount.phoneNumber,
-        successful: true
+        successful: true,
+        time: Date.now()
     });
 }

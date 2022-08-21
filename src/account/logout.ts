@@ -27,7 +27,7 @@ async function handleData(snapshot: DataSnapshot)
     
     try {
         await logout(val.phoneNumber);
-        console.log(val.phoneNumber + " logged out")
+        console.log(val.phoneNumber + " logged out");
     } 
     catch (error) {
         let errorString = String(error);
@@ -46,4 +46,10 @@ async function logout(phoneNumber: string)
     let account = await Account.FromFirestore(phoneNumber);
 
     await firestore.collection("users").doc(account.id).update({ deviceToken: null });
+
+    await database.ref("logoutStatus").set({
+        id: account.id,
+        phoneNumber: account.phoneNumber,
+        time: Date.now()
+    })
 }

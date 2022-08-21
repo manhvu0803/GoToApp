@@ -1,5 +1,5 @@
 import * as firebaseApp from "./firebaseApp";
-import { DocumentReference, Firestore, getFirestore, Query, QuerySnapshot } from "firebase-admin/firestore";
+import { DocumentReference, getFirestore, Query, QuerySnapshot } from "firebase-admin/firestore";
 
 firebaseApp.initialize();
 

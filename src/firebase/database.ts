@@ -6,14 +6,14 @@ firebaseApp.initialize();
 
 const database = getDatabase();
 
-export function on(reference: string, listenType: EventType, dataCallback: (a: DataSnapshot, b?: string | null) => any, errorCallback?: Object | ((a: Error) => any))
+export function on(reference: string, listenType: EventType, dataCallback: (a: DataSnapshot, b?: string | null) => any, errorCallback?: (a: Error) => any)
 {
     if (!errorCallback)
         errorCallback = handleError;
     database.ref(reference).on(listenType, dataCallback, errorCallback);
 }
 
-export function off(reference: string, listenType: EventType, dataCallback?: (a: DataSnapshot, b?: string | null) => any, errorCallback?: Object | ((a: Error) => any))
+export function off(reference: string, listenType: EventType, dataCallback?: (a: DataSnapshot, b?: string | null) => any, errorCallback?: (a: Error) => any)
 {
     if (!errorCallback)
         errorCallback = handleError;
