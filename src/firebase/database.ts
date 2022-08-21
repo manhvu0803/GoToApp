@@ -24,3 +24,9 @@ export function ref(reference: string | Reference)
 {
     return database.ref(reference);
 }
+
+export async function set(reference: Reference, value: any)
+{
+    value.time = Date.now().toString();
+    await reference.set(value);
+}

@@ -1,5 +1,5 @@
 import { DataSnapshot } from "firebase-admin/database";
-import { Account } from "./account";
+import { Account, AccountType } from "./account";
 import { handleError } from "../utilities";
 import * as database from "../firebase/database";
 import * as bcrypt from "bcrypt";
@@ -57,7 +57,7 @@ async function login(phoneNumber: string, password: string, deviceToken?: string
         name: account.name,
         id: account.id,
         phoneNumber: account.phoneNumber,
-        accountType: account.type,
+        accountType: AccountType[account.type],
         token: "mock_token",
         time: Date.now()
     };
