@@ -49,7 +49,8 @@ async function handleData(snapshot: DataSnapshot)
         let errorString = String(err);
         console.log(errorString);
         database.ref("bookingStatus").set({
-            error: errorString
+            error: errorString,
+            time: Date.now()
         })
     }
 }

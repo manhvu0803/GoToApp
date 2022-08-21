@@ -36,7 +36,8 @@ async function handleData(snapshot: DataSnapshot)
         database.ref("loginStatus").set({
             phoneNumber: val.phoneNumber ?? "",
             successful: false,
-            error: errorString
+            error: errorString,
+            time: Date.now()
         });    
     }
 }
@@ -57,7 +58,8 @@ async function login(phoneNumber: string, password: string, deviceToken?: string
         id: account.id,
         phoneNumber: account.phoneNumber,
         accountType: account.type,
-        token: "mock_token"
+        token: "mock_token",
+        time: Date.now()
     };
 
     if (!account.password) {

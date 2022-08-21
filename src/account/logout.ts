@@ -35,7 +35,8 @@ async function handleData(snapshot: DataSnapshot)
         database.ref("logoutStatus").set({
             phoneNumber: val.phoneNumber ?? "",
             successful: false,
-            error: errorString
+            error: errorString,
+            time: Date.now()
         });    
     }
 }
