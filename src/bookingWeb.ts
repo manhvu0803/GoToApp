@@ -24,11 +24,11 @@ async function handleData(snapshot: DataSnapshot)
     if (!val)
         return;
 
-    console.log("New booking from " + val.phoneNumber);
-
-    let account = await Account.GetByPhone(val.phoneNumber);
+    console.log("New web booking from " + val.phoneNumber);
 
     try {
+        let account = await Account.GetByPhone(val.phoneNumber);
+    
         if (account == null) {
             await CreateTempAccount(val);
         }
@@ -39,7 +39,7 @@ async function handleData(snapshot: DataSnapshot)
     catch (err) {
         let errorString = String(err);
         handleError(err);
-        database.ref("bookingStatus").set({
+        database.ref("bookingWebStatus").set({
             error: errorString,
             time: Date.now()
         })
