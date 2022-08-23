@@ -59,7 +59,7 @@ export class Account
 
         let val = result[0];
         
-        let accountType = AccountType[AccountType[val.accountType]];
+        let accountType: AccountType = AccountType[String(val.accountType)];
         return new Account(val.name, val.phoneNumber, val.password, accountType, val.deviceToken, val.id, false);
     }
 
