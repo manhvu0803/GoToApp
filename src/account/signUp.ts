@@ -36,7 +36,8 @@ async function handleData(snapshot: DataSnapshot)
         database.ref("registerStatus").set({
             name: val.name ?? "",
             successful: false,
-            error: String(error)
+            error: String(error),
+            time: Date.now()
         });
     }
 }
