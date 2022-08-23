@@ -48,6 +48,7 @@ async function logout(phoneNumber: string)
     await firestore.collection("users").doc(account.id).update({ deviceToken: null });
 
     await database.ref("logoutStatus").set({
+        successful: true,
         id: account.id,
         phoneNumber: account.phoneNumber,
         time: Date.now()
