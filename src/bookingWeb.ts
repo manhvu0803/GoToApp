@@ -55,6 +55,9 @@ async function CreateTempAccount(val: { phoneNumber: string; endPoint: { name: a
         history: FieldValue.arrayUnion(val.endPoint.name)
     });
 
+    let account = await Account.FromFirestore(val.phoneNumber);
+    NotifyBooking(account, val);
+
     console.log("Created temporary user " + val.phoneNumber);
 }
 
@@ -71,6 +74,7 @@ async function AddBookingToHistory(account: Account, val: { endPoint: { name: an
 async function NotifyBooking(account: Account, val: any) {
     val.phoneNumber = account.phoneNumber;
     val.id = account.id;
+    val.customerId = account.id;
     await database.set(database.ref("booking"), val);
 
     console.log("Notify booking for " + account.phoneNumber);
