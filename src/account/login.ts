@@ -46,7 +46,7 @@ async function login(phoneNumber: string, password: string, deviceToken?: string
 {
     let account: Account = await Account.FromFirestore(phoneNumber);
 
-    if (account.password && !bcrypt.compareSync(password, account.password)) {
+    if (!bcrypt.compareSync(password, account.password)) {
         throw new Error("Wrong phone number or password");
     }
 

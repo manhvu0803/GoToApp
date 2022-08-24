@@ -34,7 +34,7 @@ async function handleData(snapshot: DataSnapshot)
     catch (error) {
         handleError(String(error));
         database.ref("registerStatus").set({
-            name: val.name ?? "",
+            phoneNumnber: val.phoneNumber ?? "",
             successful: false,
             error: String(error),
             time: Date.now()
@@ -55,6 +55,7 @@ async function register(newAccount: Account)
     
     database.ref("registerStatus").set({
         phoneNumber: newAccount.phoneNumber,
+        id: newAccount.id,
         successful: true,
         time: Date.now()
     });
