@@ -8,12 +8,12 @@ console.log("Listening for new users");
 
 export function enable()
 {
-    database.on("newUser", "value", handleData);
+    database.on("register", "value", handleData);
 }
 
 export function disable()
 {
-    database.off("newUSer", "value");
+    database.off("register", "value");
 }
 
 async function handleData(snapshot: DataSnapshot)
