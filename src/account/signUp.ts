@@ -49,13 +49,14 @@ async function register(newAccount: Account)
         throw new Error("Phone number has already been used")
     }
     
-    await firestore.collection("users").doc().set(newAccount.jsObject());
+    let ref = firestore.collection("users").doc();
+    await ref.set(newAccount.jsObject());
 
     console.log(`Registered user ${newAccount.phoneNumber}`)
     
     database.ref("registerStatus").set({
         phoneNumber: newAccount.phoneNumber,
-        id: newAccount.id,
+        id: ref.id,
         successful: true,
         time: Date.now()
     });
