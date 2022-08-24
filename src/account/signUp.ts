@@ -34,7 +34,7 @@ async function handleData(snapshot: DataSnapshot)
     catch (error) {
         handleError(String(error));
         database.ref("registerStatus").set({
-            phoneNumnber: val.phoneNumber ?? "",
+            phoneNumber: val.phoneNumber ?? "",
             successful: false,
             error: String(error),
             time: Date.now()
