@@ -1,6 +1,7 @@
 import * as signUp from "./account/signUp"
 import * as login from "./account/login"
 import * as logout from "./account/logout"
+import * as update from "./account/update"
 import * as bookingWeb from "./bookingWeb"
 import * as express from "express"
 
@@ -11,6 +12,7 @@ app.listen(process.env.PORT || 5000, () => {
     login.enable();
     logout.enable();
     bookingWeb.enable();
+    update.enable();
 })
 
 app.get("/", (req, res) => {
