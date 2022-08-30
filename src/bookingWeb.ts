@@ -63,7 +63,11 @@ async function CreateTempAccount(val: { phoneNumber: string; endPoint: { name: a
 
 async function AddBookingToHistory(account: Account, val: { endPoint: { name: any; } }) {
     await firestore.collection("users").doc(account.id).update({
-        history: FieldValue.arrayUnion(val.endPoint.name)
+        history: FieldValue.arrayUnion(val.endPoint.name),
+        nearsest: FieldValue.arrayUnion({ 
+            time: new Date(),
+            destination: val.endPoint.name
+        })
     });
 
     console.log("Added " + val.endPoint.name + " to " + account.phoneNumber + " history");
@@ -75,6 +79,7 @@ async function NotifyBooking(account: Account, val: any) {
     val.phoneNumber = account.phoneNumber;
     val.id = account.id;
     val.customerId = account.id;
+    val.isWeb = true;
     await database.set(database.ref("booking"), val);
 
     console.log("Notify booking for " + account.phoneNumber);
